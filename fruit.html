@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+   <form id="form">
+    <label for="name">Fruit Name:</label>
+    <input type="text" id="name" required>
+    <br><br>
+    <label for="price">Price:</label>
+    <input type="text" id="price" required>
+    <br><br>
+    <label for="qty">Quantity:</label>
+    <input type="text" id="qty" required>
+    <br><br>
+    <button id="button" type="button">Add Item</button>
+   </form>
+   <br><br>
+
+   <table border="1" id="table">
+    <thead>
+        <tr>
+            <th>Fruit Name</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Delete</th>
+            <th>Edit</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+   </table>
+
+ <script>
+    const button = document.getElementById("button");
+    const fruitName = document.getElementById("name");
+    const fruitPrice = document.getElementById("price");
+    const fruitQty = document.getElementById("qty");
+    const table = document.getElementById("table").getElementsByTagName("tbody")[0];
+    
+    let currentRow = null;  // This will hold the row being edited
+
+    // Add/Update Item button click event
+    button.addEventListener("click", () => {
+        if (currentRow) {
+            // If editing a row, update the current row
+            const cells = currentRow.querySelectorAll("td");
+            cells[0].textContent = fruitName.value;
+            cells[1].textContent = fruitPrice.value;
+            cells[2].textContent = fruitQty.value;
+            currentRow = null;  // Reset currentRow after updating
+        } else {
+            // Create new row elements
+            const row = document.createElement("tr");
+
+            const nameCell = document.createElement("td");
+            nameCell.innerHTML = fruitName.value;
+            row.appendChild(nameCell);
+
+            const priceCell = document.createElement("td");
+            priceCell.innerHTML = fruitPrice.value;
+            row.appendChild(priceCell);
+
+            const qtyCell = document.createElement("td");
+            qtyCell.innerHTML = fruitQty.value;
+            row.appendChild(qtyCell);
+
+            // Delete button
+            const btnCell = document.createElement("td");
+            const btn = document.createElement("button");
+            btn.innerHTML = "Delete";
+            btn.addEventListener("click", () => {
+                row.remove();  // Remove the row when delete is clicked
+            });
+            btnCell.appendChild(btn);
+            row.appendChild(btnCell);
+
+            // Edit button
+            const editCell = document.createElement("td");
+            const btnedit = document.createElement("button");
+            btnedit.innerHTML = "Edit";
+            btnedit.addEventListener("click", () => {
+                // When edit is clicked, populate the form with row data
+                const cells = row.querySelectorAll("td");
+                fruitName.value = cells[0].textContent;
+                fruitPrice.value = cells[1].textContent;
+                fruitQty.value = cells[2].textContent;
+                currentRow = row;  // Store reference to the row being edited
+            });
+            editCell.appendChild(btnedit);
+            row.appendChild(editCell);
+
+            table.appendChild(row);  // Add the row to the table
+        }
+
+        // Reset form inputs
+        fruitName.value = "";
+        fruitPrice.value = "";
+        fruitQty.value = "";
+    });
+ </script>
+       
+</body>
+</html>
